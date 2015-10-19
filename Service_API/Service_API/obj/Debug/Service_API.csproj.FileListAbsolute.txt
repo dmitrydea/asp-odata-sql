@@ -1,0 +1,64 @@
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\Service_API.dll.config
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\Service_API.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\Service_API.pdb
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\Antlr3.Runtime.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\Microsoft.Web.Infrastructure.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\Newtonsoft.Json.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Net.Http.Formatting.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.Helpers.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.Http.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.Http.WebHost.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.Mvc.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.Optimization.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.Razor.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.WebPages.Deployment.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.WebPages.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.WebPages.Razor.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\WebGrease.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\Newtonsoft.Json.xml
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Net.Http.Formatting.xml
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.Helpers.xml
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.Http.xml
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.Http.WebHost.xml
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.Mvc.xml
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.Optimization.xml
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.Razor.xml
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.WebPages.xml
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.WebPages.Deployment.xml
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\System.Web.WebPages.Razor.xml
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\bin\Antlr3.Runtime.pdb
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\obj\Debug\Service_API.csprojResolveAssemblyReference.cache
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\obj\Debug\Service_API.dll
+c:\users\alexey\documents\visual studio 2015\Projects\Service_API\Service_API\obj\Debug\Service_API.pdb
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\Service_API.dll.config
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\Service_API.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\Service_API.pdb
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\Antlr3.Runtime.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\Microsoft.Web.Infrastructure.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\Newtonsoft.Json.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Net.Http.Formatting.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.Helpers.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.Http.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.Http.WebHost.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.Mvc.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.Optimization.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.Razor.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.WebPages.Deployment.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.WebPages.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.WebPages.Razor.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\WebGrease.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\Newtonsoft.Json.xml
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Net.Http.Formatting.xml
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.Helpers.xml
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.Http.xml
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.Http.WebHost.xml
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.Mvc.xml
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.Optimization.xml
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.Razor.xml
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.WebPages.xml
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.WebPages.Deployment.xml
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\System.Web.WebPages.Razor.xml
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\bin\Antlr3.Runtime.pdb
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\obj\Debug\Service_API.csprojResolveAssemblyReference.cache
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\obj\Debug\Service_API.dll
+D:\Documets\Cloud\Documents\Arcelor\Work\Service_API\Service_API\obj\Debug\Service_API.pdb
