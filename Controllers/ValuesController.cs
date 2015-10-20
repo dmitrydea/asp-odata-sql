@@ -21,14 +21,12 @@ namespace Service_API.Controllers
         {
             return parser.process_request(Request.RequestUri.AbsolutePath.Split('/')[3], Request.RequestUri.Query);
             
-            return new List<string>();
         }
 
         public List<string> Get(string request)   //получение GET-запроса по стандарту OData
         {
             return parser.process_request(Request.RequestUri.AbsolutePath.Split('/')[3], Request.RequestUri.Query);
 
-            return new List<string>();
         }
 
         public void Connect(string server, string db = "")  //формирование строки подключение к БД

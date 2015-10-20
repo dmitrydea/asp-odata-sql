@@ -27,6 +27,7 @@ namespace Service_API.Class
             list.Add("index=" + find_table.Matches(path + query)[0].Groups[2].ToString());    //index
             list.Add("field=" + find_table.Matches(path + query)[0].Groups[3].ToString());    //field
             list.Add("query=" + find_table.Matches(path + query)[0].Groups[4].ToString());    //query
+            list.Add("query_parametr=" + find_table.Matches(path + query)[0].Groups[4].ToString());    //query_parametr
             return list;
         }
     }
