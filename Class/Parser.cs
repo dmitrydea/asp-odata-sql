@@ -21,11 +21,12 @@ namespace Service_API.Class
         public List<string> process_request(string path, string query)
         {
             List<string> list = new List<string>();
-            Regex find_table = new Regex(@"^([^(\/]+)(?:\((.*?)\))?\/(?:([^?]+))?\?select=(.*)$");  //выборка таблицы и параметров к ней
-            list.Add("table=" + find_table.Matches(path + query)[0].ToString());    //table
-            list.Add("table=" + find_table.Matches(path + query)[1].ToString());    //index
-            list.Add("table=" + find_table.Matches(path + query)[2].ToString());    //field
-            list.Add("table=" + find_table.Matches(path + query)[3].ToString());    //field
+            Regex find_table = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:/|$))(?:/|)([a-zA-Z]+|)(?:[?]|)([a-zA-Z]+|)(?:=|)([A-Z,a-z]+|)");  //выборка таблицы и параметров к ней
+            var mmmm = find_table.Matches(path + query);
+            list.Add("table=" + find_table.Matches(path + query)[0].Groups[1].ToString());    //table
+            list.Add("index=" + find_table.Matches(path + query)[0].Groups[2].ToString());    //index
+            list.Add("field=" + find_table.Matches(path + query)[0].Groups[3].ToString());    //field
+            list.Add("query=" + find_table.Matches(path + query)[0].Groups[4].ToString());    //query
             return list;
         }
     }
