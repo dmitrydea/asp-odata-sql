@@ -20,7 +20,7 @@ namespace Service_API.Class
         {
             
         }
-        public JsonResult process_request(string path, string query)
+        public DataTable process_request(string path, string query)
         {
             Regex find_table = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:/|$))(?:/|)([a-zA-Z]+|)(?:[?]|)([a-zA-Z]+|)(?:=|)([A-Z,a-z]+|)");  //выборка таблицы и параметров к ней
             table = find_table.Matches(path + query)[0].Groups[1].ToString();    //table
@@ -29,17 +29,14 @@ namespace Service_API.Class
             query = find_table.Matches(path + query)[0].Groups[4].ToString();    //query
             query_parametr = find_table.Matches(path + query)[0].Groups[5].ToString();    //query_parametr
 
-            JsonResult jr = new JsonResult();
             if (table != String.Empty)
             {
-                process_table();
+                 return process_table();
             }
             else
             {
-
+                return new DataTable();
             }
-
-            return new JsonResult();
         }
 
         public DataTable process_table()
@@ -47,7 +44,7 @@ namespace Service_API.Class
             ;
             if (index != String.Empty)
             {
-                process_index();
+                return process_index();
             }
             else
             {
@@ -61,7 +58,7 @@ namespace Service_API.Class
         {
             if (field != String.Empty)
             {
-                process_field();
+                return process_field();
             }
             else
             {
@@ -71,12 +68,13 @@ namespace Service_API.Class
             }
             return data_rezult;
         }
-        public void process_field()
+        public DataTable process_field()
         {
             if (query != String.Empty)
             {
                 process_query();
             }
+            return data_rezult;
         }
         public void process_query()
         {

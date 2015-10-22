@@ -121,10 +121,18 @@ namespace Service_API.Class
         {
             _connect(_server, _db);
             SqlCommand comm = new SqlCommand(command, con);
-            SqlDataReader reader = comm.ExecuteReader();
-            DataTable dt = new DataTable();
-            dt.Load(reader);
-            return dt;
+            SqlDataReader reader;
+            try
+            {
+                reader  = comm.ExecuteReader();
+                DataTable dt = new DataTable();
+                dt.Load(reader);
+                return dt;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
     }
