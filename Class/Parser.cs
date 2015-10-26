@@ -39,7 +39,7 @@ namespace Service_API.Class
             }
         }
 
-        public DataTable process_table()
+        public DataTable process_table()    //processing the request to output of tables
         {
             ;
             if (index != String.Empty)
@@ -51,20 +51,26 @@ namespace Service_API.Class
                 data_rezult = null;
                 string SQL_request = "SELECT * FROM \"" + table + "\"";
                 data_rezult =  Connect.command_go(SQL_request);
+                data_rezult.TableName = table;
             }
             return data_rezult;
         }
-        public DataTable process_index()
+        public DataTable process_index()    //processing the request to output of tables
         {
             if (field != String.Empty)
             {
                 return process_field();
+            }
+            else if(query != String.Empty)
+            {
+                return process_query();
             }
             else
             {
                 data_rezult = null;
                 string SQL_request = "SELECT * FROM \"" + table + "\"  WHERE id = " + index;
                 data_rezult = Connect.command_go(SQL_request);
+                data_rezult.TableName = table;
             }
             return data_rezult;
         }
@@ -76,13 +82,14 @@ namespace Service_API.Class
             }
             return data_rezult;
         }
-        public void process_query()
+        public DataTable process_query()
         {
             
             if (query_parametr != String.Empty)
             {
 
             }
+            return data_rezult;
         }
 
     }

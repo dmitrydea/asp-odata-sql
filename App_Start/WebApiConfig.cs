@@ -17,9 +17,14 @@ namespace Service_API
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{request}/{query}",    // /{action}
-                defaults: new { id = RouteParameter.Optional }
+                routeTemplate: "api/{controller}/{request}",    // /{action}
+                defaults: new {  }
             );
+            /*config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{request}/{query}",    // /{action}
+                defaults: new {  }
+            );*/
         }
     }
 }
