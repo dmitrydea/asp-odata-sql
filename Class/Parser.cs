@@ -22,12 +22,21 @@ namespace Service_API.Class
         }
         public DataTable process_request(string path, string query)
         {
-            Regex find_table = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:/|$))(?:/|)([a-zA-Z]+|)(?:[?]|)([a-zA-Z]+|)(?:=|)([A-Z,a-z]+|)");  //выборка таблицы и параметров к ней
-            table = find_table.Matches(path + query)[0].Groups[1].ToString();    //table
-            index = find_table.Matches(path + query)[0].Groups[2].ToString();    //index
-            field = find_table.Matches(path + query)[0].Groups[3].ToString();    //field
-            query = find_table.Matches(path + query)[0].Groups[4].ToString();    //query
-            query_parametr = find_table.Matches(path + query)[0].Groups[5].ToString();    //query_parametr
+
+            Regex find_table = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:/||$))(?:/||$)([a-zA-Z]+||$)(?:[?]|)([\$a-zA-Z]+|)(?:=|)([1-9a-zA-Z,]+||$)");  //выборка таблицы и параметров к ней
+            var s = find_table.Matches(path + query);
+            try
+            {
+                table = find_table.Matches(path + query)[0].Groups[1].ToString();    //table
+                index = find_table.Matches(path + query)[0].Groups[2].ToString();    //index
+                field = find_table.Matches(path + query)[0].Groups[3].ToString();    //field
+                this.query = find_table.Matches(path + query)[0].Groups[4].ToString();    //query
+                query_parametr = find_table.Matches(path + query)[0].Groups[5].ToString();    //query_parametr
+            }
+            catch
+            {
+                return null;
+            }
 
             if (table != String.Empty)
             {
@@ -35,23 +44,33 @@ namespace Service_API.Class
             }
             else
             {
-                return new DataTable();
+                return null;
             }
         }
 
         public DataTable process_table()    //processing the request to output of tables
         {
-            ;
-            if (index != String.Empty)
+            if (query != String.Empty)
+            {
+                return process_query();
+            }
+            else if (index != String.Empty)
             {
                 return process_index();
+            }
+            else if (field != String.Empty)
+            {
+                return process_field();
             }
             else
             {
                 data_rezult = null;
                 string SQL_request = "SELECT * FROM \"" + table + "\"";
                 data_rezult =  Connect.command_go(SQL_request);
-                data_rezult.TableName = table;
+                if (data_rezult != null)
+                {
+                    data_rezult.TableName = table;
+                }
             }
             return data_rezult;
         }
@@ -70,7 +89,10 @@ namespace Service_API.Class
                 data_rezult = null;
                 string SQL_request = "SELECT * FROM \"" + table + "\"  WHERE id = " + index;
                 data_rezult = Connect.command_go(SQL_request);
-                data_rezult.TableName = table;
+                if (data_rezult != null)
+                {
+                    data_rezult.TableName = table;
+                }
             }
             return data_rezult;
         }
@@ -80,14 +102,56 @@ namespace Service_API.Class
             {
                 process_query();
             }
+            else
+            {
+
+            }
             return data_rezult;
         }
         public DataTable process_query()
         {
-            
             if (query_parametr != String.Empty)
             {
-
+                data_rezult = null;
+                string SQL_request;
+                switch (query)
+                {
+                    /*case "$search":
+                        //SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
+                        break;
+                    case "$filter":
+                        //SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
+                        break;
+                    case "$count":
+                        //SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
+                        break;
+                    case "$orderby":
+                        //SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
+                        break;*/
+                    case "$skip":
+                        SQL_request = "SELECT * FROM  ( select *, ROW_NUMBER() over (ORDER BY id) AS ROW_NUM from \"" + table+ "\") x where ROW_NUM>" + query_parametr;
+                        break;
+                    case "$top":
+                        SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
+                        break;
+                    default:
+                        if (index != String.Empty)
+                        {
+                            SQL_request = query + " " + query_parametr + " FROM \"" + table + "\" WHERE id = " + index;
+                        }
+                        else
+                        {
+                            SQL_request = query + " " + query_parametr + " FROM \"" + table + "\"";
+                        }
+                        break;
+                }
+                
+                
+                data_rezult = Connect.command_go(SQL_request);
+                if (data_rezult != null)
+                {
+                    data_rezult.TableName = table;
+                }
             }
             return data_rezult;
         }
