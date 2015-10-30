@@ -22,8 +22,8 @@ namespace Service_API.Class
         }
         public DataTable process_request(string path, string query)
         {
-
-            Regex find_table = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:/||$))(?:/||$)([a-zA-Z]+||$)(?:[?]|)([\$a-zA-Z]+|)(?:=|)([1-9a-zA-Z,]+||$)");  //выборка таблицы и параметров к ней
+            query = query.Replace("%20", " ");
+            Regex find_table = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:/||$))(?:/||$)([a-zA-Z]+||$)(?:[?]|)([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Z, ']+||$)");  //выборка таблицы и параметров к ней
             var s = find_table.Matches(path + query);
             try
             {
@@ -118,11 +118,12 @@ namespace Service_API.Class
                 {
                     /*case "$search":
                         //SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
-                        break;
+                        break;*/
                     case "$filter":
-                        //SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
+                        query_parametr = query_parametr.Replace("and", "&").Replace("or", "|").Replace("lt", "<").Replace("gt", ">").Replace("eq","=").Replace("ne","!=").Replace("ge", ">=").Replace("le", "<=").Replace("ne", "<>");
+                        SQL_request = "SELECT * FROM \"" + table + "\" WHERE "+ query_parametr;
                         break;
-                    case "$count":
+                    /*case "$count":
                         //SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
                         break;
                     case "$orderby":
@@ -133,6 +134,9 @@ namespace Service_API.Class
                         break;
                     case "$top":
                         SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
+                        break;
+                    case "$select":
+                        SQL_request = "SELECT " + query_parametr + " FROM \"" + table + "\"";
                         break;
                     default:
                         if (index != String.Empty)
