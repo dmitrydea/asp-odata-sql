@@ -9,9 +9,6 @@ namespace Service_API
     {
         public static void Register(HttpConfiguration config)
         {
-            // Конфигурация и службы веб-API
-            GlobalConfiguration.Configuration.Formatters.JsonFormatter.AddQueryStringMapping("$format", "json", "application/json");
-            GlobalConfiguration.Configuration.Formatters.XmlFormatter.AddQueryStringMapping("$format", "xml", "application/xml");
             // Маршруты веб-API
             //config.MapHttpAttributeRoutes();
 
@@ -20,11 +17,11 @@ namespace Service_API
                 routeTemplate: "api/{controller}/{request}",    // /{action}
                 defaults: new {  }
             );
-            /*config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{request}/{query}",    // /{action}
+            config.Routes.MapHttpRoute(
+                name: "DefaultApiField",
+                routeTemplate: "api/{controller}/{request}/{field}",    // /{action}
                 defaults: new {  }
-            );*/
+            );
         }
     }
 }
