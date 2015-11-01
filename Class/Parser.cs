@@ -19,8 +19,8 @@ namespace Service_API.Class
         public void a()
         {
             
-        }
-        public DataTable process_request(string path, string query)
+                        }
+        public DataTable process_request(string path, string query, string field)
         {
             query = query.Replace("%20", " ");
             Regex find_table = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:/||$))(?:/||$)([a-zA-Z]+||$)(?:[?]|)([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Z, ']+||$)");  //выборка таблицы и параметров к ней
@@ -29,7 +29,7 @@ namespace Service_API.Class
             {
                 table = find_table.Matches(path + query)[0].Groups[1].ToString();    //table
                 index = find_table.Matches(path + query)[0].Groups[2].ToString();    //index
-                field = find_table.Matches(path + query)[0].Groups[3].ToString();    //field
+                this.field = field;    //field
                 this.query = find_table.Matches(path + query)[0].Groups[4].ToString();    //query
                 query_parametr = find_table.Matches(path + query)[0].Groups[5].ToString();    //query_parametr
             }
@@ -104,6 +104,13 @@ namespace Service_API.Class
             }
             else
             {
+                data_rezult = null;
+                string SQL_request = "SELECT " + field + " FROM \"" + table + "\"";
+                data_rezult = Connect.command_go(SQL_request);
+                if (data_rezult != null)
+                {
+                    data_rezult.TableName = table;
+                }
 
             }
             return data_rezult;
@@ -121,7 +128,7 @@ namespace Service_API.Class
                         break;*/
                     case "$filter":
                         query_parametr = query_parametr.Replace("and", "&").Replace("or", "|").Replace("lt", "<").Replace("gt", ">").Replace("eq","=").Replace("ne","!=").Replace("ge", ">=").Replace("le", "<=").Replace("ne", "<>");
-                        SQL_request = "SELECT * FROM \"" + table + "\" WHERE "+ query_parametr;
+                        SQL_request = "SELECT " + field == String.Empty ? "*" : field + " FROM \"" + table + "\" WHERE "+ query_parametr;
                         break;
                     /*case "$count":
                         //SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
@@ -130,7 +137,7 @@ namespace Service_API.Class
                         //SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
                         break;*/
                     case "$skip":
-                        SQL_request = "SELECT * FROM  ( select *, ROW_NUMBER() over (ORDER BY id) AS ROW_NUM from \"" + table+ "\") x where ROW_NUM>" + query_parametr;
+                        SQL_request = "SELECT " + (field == String.Empty ? "*" : field) + " FROM  ( select *, ROW_NUMBER() over (ORDER BY id) AS ROW_NUM from \"" + table+ "\") x where ROW_NUM>" + query_parametr;
                         break;
                     case "$top":
                         SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
