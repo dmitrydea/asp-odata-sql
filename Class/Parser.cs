@@ -23,20 +23,22 @@ namespace Service_API.Class
         public DataTable process_request(string path, string query, string field)
         {
             query = query.Replace("%20", " ");
-            Regex find_table = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:/||$))(?:/||$)([a-zA-Z]+||$)(?:[?]|)([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Z, ']+||$)");  //выборка таблицы и параметров к ней
-            var s = find_table.Matches(path + query);
+            Regex path_reg = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:/||$))(?:/||$)([a-zA-Z]+||$)");  //выборка таблицы и параметров к ней
+            Regex query_reg = new Regex(@"(?:[?]|)([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Z, ']+||$)");  //выборка таблицы и параметров к ней
             try
             {
-                table = find_table.Matches(path + query)[0].Groups[1].ToString();    //table
-                index = find_table.Matches(path + query)[0].Groups[2].ToString();    //index
-                this.field = field;    //field
-                this.query = find_table.Matches(path + query)[0].Groups[4].ToString();    //query
-                query_parametr = find_table.Matches(path + query)[0].Groups[5].ToString();    //query_parametr
+                table = path_reg.Matches(path + query)[0].Groups[1].ToString();    //table
+                index = path_reg.Matches(path + query)[0].Groups[2].ToString();    //index
+
+                this.query = query_reg.Matches(path + query)[0].Groups[4].ToString();    //query
+                query_parametr = query_reg.Matches(path + query)[0].Groups[5].ToString();    //query_parametr
             }
             catch
             {
                 return null;
             }
+
+            this.field = field;    //field
 
             if (table != String.Empty)
             {
@@ -124,7 +126,7 @@ namespace Service_API.Class
                 switch (query)
                 {
                     /*case "$search":
-                        //SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
+                        SQL_request = "SELECT * FROM \"" + table + "\" WHERE " + query_parametr;
                         break;*/
                     case "$filter":
                         query_parametr = query_parametr.Replace("and", "&").Replace("or", "|").Replace("lt", "<").Replace("gt", ">").Replace("eq","=").Replace("ne","!=").Replace("ge", ">=").Replace("le", "<=").Replace("ne", "<>");
