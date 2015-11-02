@@ -14,24 +14,21 @@ namespace Service_API.Class
         DataTable data_rezult = new DataTable();
         public Parser()
         {
-            
+
         }
-        public void a()
-        {
-            
-                        }
         public DataTable process_request(string path, string query, string field)
         {
-            query = query.Replace("%20", " ");
+            
+            query =  HttpUtility.UrlDecode(query).Replace("\"", "'");
             Regex path_reg = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:/||$))(?:/||$)([a-zA-Z]+||$)");  //выборка таблицы и параметров к ней
-            Regex query_reg = new Regex(@"(?:[?]|)([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Z, ']+||$)");  //выборка таблицы и параметров к ней
+            Regex query_reg = new Regex(@"(?:[?]|)([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)");  //выборка таблицы и параметров к ней
             try
             {
                 table = path_reg.Matches(path + query)[0].Groups[1].ToString();    //table
                 index = path_reg.Matches(path + query)[0].Groups[2].ToString();    //index
-
-                this.query = query_reg.Matches(path + query)[0].Groups[4].ToString();    //query
-                query_parametr = query_reg.Matches(path + query)[0].Groups[5].ToString();    //query_parametr
+                var s = query_reg.Matches(path + query);
+                this.query = query_reg.Matches(path + query)[1].Groups[1].ToString();    //query
+                query_parametr = query_reg.Matches(path + query)[1].Groups[2].ToString();    //query_parametr
             }
             catch
             {
@@ -130,7 +127,7 @@ namespace Service_API.Class
                         break;*/
                     case "$filter":
                         query_parametr = query_parametr.Replace("and", "&").Replace("or", "|").Replace("lt", "<").Replace("gt", ">").Replace("eq","=").Replace("ne","!=").Replace("ge", ">=").Replace("le", "<=").Replace("ne", "<>");
-                        SQL_request = "SELECT " + field == String.Empty ? "*" : field + " FROM \"" + table + "\" WHERE "+ query_parametr;
+                        SQL_request = "SELECT " + (field == String.Empty ? "*" : field) + " FROM \"" + table + "\" WHERE " + query_parametr;
                         break;
                     /*case "$count":
                         //SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
