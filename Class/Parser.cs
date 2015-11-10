@@ -20,13 +20,12 @@ namespace Service_API.Class
         {
             
             query =  HttpUtility.UrlDecode(query).Replace("\"", "'");
-            Regex path_reg = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:/||$))(?:/||$)([a-zA-Z]+||$)");  //выборка таблицы и параметров к ней
-            Regex query_reg = new Regex(@"(?:[?]|)([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)");  //выборка таблицы и параметров к ней
+            Regex path_reg = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:/||$))(?:/||$)([a-zA-Z]+||$)");  //receipt of a name of the table, fields and indexes to them
+            Regex query_reg = new Regex(@"(?:[?]|)([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)");  //receipt of a line of request and parameters
             try
             {
-                table = path_reg.Matches(path + query)[0].Groups[1].ToString();    //table
+                table = path_reg.Matches(path + query)[0].Groups[1].ToString();    //table name
                 index = path_reg.Matches(path + query)[0].Groups[2].ToString();    //index
-                var s = query_reg.Matches(path + query);
                 this.query = query_reg.Matches(path + query)[1].Groups[1].ToString();    //query
                 query_parametr = query_reg.Matches(path + query)[1].Groups[2].ToString();    //query_parametr
             }
@@ -73,7 +72,7 @@ namespace Service_API.Class
             }
             return data_rezult;
         }
-        public DataTable process_index()    //processing the request to output of tables
+        public DataTable process_index()    
         {
             if (field != String.Empty)
             {

@@ -24,9 +24,7 @@ namespace Service_API.Controllers
 
         public string Get(string request)   //receive answer from GET-request by OData
         {
-            return JsonConvert.SerializeObject(parser.process_request(Request.RequestUri.AbsolutePath.Split('/')[3], Request.RequestUri.Query, string.Empty));
-
-
+            
             if (Request.Headers.Accept.ToString() == "application/json")
             {
                 return JsonConvert.SerializeObject(parser.process_request(Request.RequestUri.AbsolutePath.Split('/')[3], Request.RequestUri.Query, string.Empty));
@@ -35,7 +33,6 @@ namespace Service_API.Controllers
             {
                 System.IO.StringWriter writer = new System.IO.StringWriter();
                 DataTable dt = parser.process_request(Request.RequestUri.AbsolutePath.Split('/')[3], Request.RequestUri.Query, string.Empty);
-                dt.TableName = "a";
                 dt.WriteXml(writer, XmlWriteMode.WriteSchema, false);
                 string result = writer.ToString();
                 return result;
@@ -46,27 +43,5 @@ namespace Service_API.Controllers
             }
         }
 
-       
-        
-        // GET api/values/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        public void Delete(int id)
-        {
-        }
     }
 }

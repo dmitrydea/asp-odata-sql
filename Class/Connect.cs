@@ -11,13 +11,13 @@ namespace Service_API.Class
 {
     public class Connect
     {
-        static string _server = "Alexey-PC";
-        static string _db = "Material";
-        static string _table = "user";
+        static string _server = "server_name";
+        static string _db = "database_name";
+        static string _table = "table_name";
         static SqlConnection con;
         public static bool connect_status = false;
 
-        public static void _connect(string server, string db = "")  //формирование строки подключение к БД
+        public static void _connect(string server, string db = "")  //forming of a string connection to a DB
         {
             try
             {
@@ -35,87 +35,7 @@ namespace Service_API.Class
             con.Close();
         }
 
-        [HttpGet]
-        public List<string> GetServers() //получение всех серверов доступных компьютеру
-        {
-            SqlDataSourceEnumerator instance = SqlDataSourceEnumerator.Instance;
-            DataTable dt = instance.GetDataSources();
-            List<string> servers = new List<string>();
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                servers.Add(dt.Rows[i][0].ToString());
-            }
-            return servers;
-
-        }
-
-        [HttpGet]
-        public IEnumerable<string> GetDB(string server) //получение всех БД с сервера server
-        {
-
-            _connect(server);
-            string result = string.Empty;
-            string SQL_Command_Get_Tables = "EXEC sp_Databases";
-            SqlCommand comm = new SqlCommand(SQL_Command_Get_Tables, con);
-            SqlDataReader reader = comm.ExecuteReader();
-            List<string> table = new List<string>();
-            while (reader.Read())
-            {
-                table.Add(reader.GetString(0));
-            }
-
-            con.Close();
-            reader.Close();
-            return table;
-        }
-
-        [HttpGet]
-        public IEnumerable<string> GetTables(string server, string db) //получение всех таблиц с базы данных db
-        {
-
-            _connect(_server, _db);
-            string result = string.Empty;
-            string SQL_Command_Get_Tables = "SELECT TABLE_NAME FROM information_schema.TABLES";
-            SqlCommand comm = new SqlCommand(SQL_Command_Get_Tables, con);
-            SqlDataReader reader = comm.ExecuteReader();
-            List<string> table = new List<string>();
-            while (reader.Read())
-            {
-                table.Add(reader.GetString(0));
-            }
-
-            con.Close();
-            reader.Close();
-            return table;
-        }
-
-        [HttpGet]
-        public List<string> Get_info(string server, string table) //получение всех полей, которые есть в таблице table
-        {
-            _connect(_server);
-            string SQL_Command_Get_Fields = "SELECT " +
-              "COLUMN_NAME" +
-            " FROM   " +
-              "INFORMATION_SCHEMA.COLUMNS " +
-            "WHERE   " +
-              "TABLE_NAME = '" + _table + "' " +
-            "ORDER BY " +
-              "ORDINAL_POSITION ASC; ";
-
-            SqlCommand comm = new SqlCommand(SQL_Command_Get_Fields, con);
-            SqlDataReader reader = comm.ExecuteReader();
-            List<string> colums_name = new List<string>();
-            while (reader.Read())
-            {
-                for (int i = 0; i < reader.FieldCount; i++)
-                {
-                    colums_name.Add(reader.GetValue(i).ToString());
-                }
-            }
-            con.Close();
-            con.Dispose();
-            return colums_name;
-        }
+        
 
         public static DataTable command_go(string command)
         {
