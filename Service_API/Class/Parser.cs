@@ -10,7 +10,8 @@ namespace Service_API.Class
 {
     public class Parser
     {
-        string table = String.Empty, index = String.Empty, field = String.Empty, query = String.Empty, query_parametr = String.Empty;
+        string table = String.Empty, index = String.Empty, field = String.Empty;
+        string[]query = new string[0], query_parametr = new string[0];
         DataTable data_rezult = new DataTable();
         public Parser()
         {
@@ -18,16 +19,39 @@ namespace Service_API.Class
         }
         public DataTable process_request(string path, string query, string field)
         {
-            
             query =  HttpUtility.UrlDecode(query).Replace("\"", "'");
             Regex path_reg = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:/||$))(?:/||$)([a-zA-Z]+||$)");  //receipt of a name of the table, fields and indexes to them
-            Regex query_reg = new Regex(@"(?:[?]|)([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)");  //receipt of a line of request and parameters
+            Regex query_reg = new Regex(@"(?:[?]|)(?:([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)|([\$&a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)|([\$&a-zA-Z]+|)(?:=|)(?:\(([\$&a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)\)))"); //receipt of a line of request and parameters
             try
             {
                 table = path_reg.Matches(path + query)[0].Groups[1].ToString();    //table name
                 index = path_reg.Matches(path + query)[0].Groups[2].ToString();    //index
-                this.query = query_reg.Matches(path + query)[1].Groups[1].ToString();    //query
-                query_parametr = query_reg.Matches(path + query)[1].Groups[2].ToString();    //query_parametr
+                var matches = query_reg.Matches(path + query);
+                for (int i = 1; i < matches.Count; i++)
+                {
+                    string s = matches[i].Groups[1].ToString();
+                    if (matches[i].Groups[1].ToString() != "")
+                    {
+                        
+                        if (matches[i].Groups[1].ToString() == "$expand")
+                        {
+                            Array.Resize(ref this.query, this.query.Length + 1);
+                            Array.Resize(ref query_parametr, query_parametr.Length + 1);
+                            this.query[this.query.Length - 1] = matches[i].Groups[1].ToString();    //query_first(expand)
+                            this.query[this.query.Length - 1] += matches[i + 2].Groups[1].ToString();    //query_second
+                            query_parametr[query_parametr.Length - 1] = matches[i + 2].Groups[2].ToString();    //query_parametr
+                            i += 2;
+                        }
+                        else
+                        {
+                            Array.Resize(ref this.query, this.query.Length + 1);
+                            Array.Resize(ref query_parametr, query_parametr.Length + 1);
+                            this.query[this.query.Length - 1] = matches[i].Groups[1].ToString();    //query
+                            query_parametr[query_parametr.Length - 1] = matches[i].Groups[2].ToString();    //query_parametr
+                        }
+                    }
+                    
+                }
             }
             catch
             {
@@ -48,7 +72,7 @@ namespace Service_API.Class
 
         public DataTable process_table()    //processing the request to output of tables
         {
-            if (query != String.Empty)
+            if (query.Length != 0)
             {
                 return process_query();
             }
@@ -78,7 +102,7 @@ namespace Service_API.Class
             {
                 return process_field();
             }
-            else if(query != String.Empty)
+            else if (query.Length != 0)
             {
                 return process_query();
             }
@@ -96,7 +120,7 @@ namespace Service_API.Class
         }
         public DataTable process_field()
         {
-            if (query != String.Empty)
+            if (query.Length != 0)
             {
                 process_query();
             }
@@ -115,47 +139,56 @@ namespace Service_API.Class
         }
         public DataTable process_query()
         {
-            if (query_parametr != String.Empty)
+            if (query_parametr.Length != 0)
             {
                 data_rezult = null;
-                string SQL_request;
-                switch (query)
+                string SQL_request = string.Empty;
+                for (int i = 0; i < query.Length; i++)
                 {
-                    /*case "$search":
-                        SQL_request = "SELECT * FROM \"" + table + "\" WHERE " + query_parametr;
-                        break;*/
-                    case "$filter":
-                        query_parametr = query_parametr.Replace("and", "&").Replace("or", "|").Replace("lt", "<").Replace("gt", ">").Replace("eq","=").Replace("ne","!=").Replace("ge", ">=").Replace("le", "<=").Replace("ne", "<>");
-                        SQL_request = "SELECT " + (field == String.Empty ? "*" : field) + " FROM \"" + table + "\" WHERE " + query_parametr;
-                        break;
-                    /*case "$count":
-                        //SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
-                        break;
-                    case "$orderby":
-                        //SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
-                        break;*/
-                    case "$skip":
-                        SQL_request = "SELECT " + (field == String.Empty ? "*" : field) + " FROM  ( select *, ROW_NUMBER() over (ORDER BY id) AS ROW_NUM from \"" + table+ "\") x where ROW_NUM>" + query_parametr;
-                        break;
-                    case "$top":
-                        SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
-                        break;
-                    case "$select":
-                        SQL_request = "SELECT " + query_parametr + " FROM \"" + table + "\"";
-                        break;
-                    default:
-                        if (index != String.Empty)
-                        {
-                            SQL_request = query + " " + query_parametr + " FROM \"" + table + "\" WHERE id = " + index;
-                        }
-                        else
-                        {
-                            SQL_request = query + " " + query_parametr + " FROM \"" + table + "\"";
-                        }
-                        break;
+
+                    switch (query[i])
+                    {
+                        /*case "$search":
+                            SQL_request = "SELECT * FROM \"" + table + "\" WHERE " + query_parametr;
+                            break;*/
+                        case "$filter":
+                            query_parametr[i] = query_parametr[i].Replace("and", "&").Replace("or", "|").Replace("lt", "<").Replace("gt", ">").Replace("eq", "=").Replace("ne", "!=").Replace("ge", ">=").Replace("le", "<=").Replace("ne", "<>");
+                            SQL_request += "SELECT " + (field == String.Empty ? "*" : field) + " FROM \"" + table + "\" WHERE " + query_parametr[i];
+                            break;
+                        /*case "$count":
+                            //SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
+                            break;
+                        case "$orderby":
+                            //SQL_request = "SELECT top " + query_parametr + " * FROM \"" + table + "\"";
+                            break;*/
+                        case "$skip":
+                            SQL_request += "SELECT " + (field == String.Empty ? "*" : field) + " FROM  ( select *, ROW_NUMBER() over (ORDER BY id) AS ROW_NUM from \"" + table + "\") x where ROW_NUM>" + query_parametr[i];
+                            break;
+                        case "$top":
+                            SQL_request += "SELECT top " + query_parametr[i] + " * FROM \"" + table + "\"";
+                            break;
+                        case "$select":
+                            SQL_request += "SELECT " + query_parametr[i] + " FROM \"" + table + "\"";
+                            break;
+                        default:
+                            if (index != String.Empty)
+                            {
+                                SQL_request += query[i] + " " + query_parametr[i] + " FROM \"" + table + "\" WHERE id = " + index;
+                            }
+                            else
+                            {
+                                SQL_request += query[i] + " " + query_parametr[i] + " FROM \"" + table + "\"";
+                            }
+                            break;
+                    }
+
+                    if (i + 1 != query.Length && query[i+1].IndexOf("$expand") != -1)
+                    {
+                        query[i + 1] = query[i + 1].Replace("$expand", "");
+                        SQL_request += " UNION ";
+                    }
+
                 }
-                
-                
                 data_rezult = Connect.command_go(SQL_request);
                 if (data_rezult != null)
                 {
