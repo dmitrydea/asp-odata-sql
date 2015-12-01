@@ -1,12 +1,13 @@
 Unified web service for ODATA protocol
 
 
-http://host/service/Products
-http://host/service/Products(id)
+http://host/odata_servise/table
+http://host/odata_servise/table(id)
 
-http://host/service/Products/field
-http://host/service/Products?$filter= id eq num
-http://host/service/Products?select=*
-http://host/service/Products?select=field1, field2
-http://host/service/Products?$skip=2
-http://host/service/Products?$top=5
+http://host/odata_servise/table/field
+http://host/odata_servise/table?$filter=id eq num
+http://host/odata_servise/table?select=*
+http://host/odata_servise/table?select=field1, field2
+http://host/odata_servise/table?$skip=num
+http://host/odata_servise/table?$top=num
+http://host/odata_servise/table1?$filter=id eq num&$expand=table2($filter=id eq num)
