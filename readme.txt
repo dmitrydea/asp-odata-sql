@@ -11,3 +11,4 @@ http://host/odata_servise/table?select=field1, field2
 http://host/odata_servise/table?$skip=num
 http://host/odata_servise/table?$top=num
 http://host/odata_servise/table1?$filter=id eq num&$expand=table2($filter=id eq num)
+http://host/odata_servise/table($level=0)
