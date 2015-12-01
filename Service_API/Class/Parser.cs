@@ -10,7 +10,7 @@ namespace Service_API.Class
 {
     public class Parser
     {
-        string table = String.Empty, index = String.Empty, field = String.Empty;
+        string table = String.Empty, index = String.Empty, field = String.Empty, level = String.Empty;
         string[]query = new string[0], query_parametr = new string[0];
         DataTable data_rezult = new DataTable();
         public Parser()
@@ -20,13 +20,15 @@ namespace Service_API.Class
         public DataTable process_request(string path, string query, string field)
         {
             query =  HttpUtility.UrlDecode(query).Replace("\"", "'");
-            Regex path_reg = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:/||$))(?:/||$)([a-zA-Z]+||$)");  //receipt of a name of the table, fields and indexes to them
+            Regex path_reg = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:[\$level=]([0-9]+)||$)|(?:/||$))(?:/||$)([a-zA-Z]+||$)");  //receipt of a name of the table, fields and indexes to them
             Regex query_reg = new Regex(@"(?:[?]|)(?:([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)|([\$&a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)|([\$&a-zA-Z]+|)(?:=|)([A-Za-z_]+)(?:\(([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)\)))"); //receipt of a line of request and parameters
             try
             {
-                table = path_reg.Matches(path + query)[0].Groups[1].ToString();    //table name
-                index = path_reg.Matches(path + query)[0].Groups[2].ToString();    //index
+                table = path_reg.Matches(path)[0].Groups[1].ToString();    //table name
+                index = path_reg.Matches(path)[0].Groups[2].ToString();    //index
+                level = path_reg.Matches(path)[1].Groups[3].ToString();    //level
                 var matches = query_reg.Matches(query);
+                var matches1 = path_reg.Matches(path);
                 if (matches[0].Groups[1].ToString() != "")
                 {
                     Array.Resize(ref this.query, this.query.Length + 1);
@@ -69,12 +71,27 @@ namespace Service_API.Class
 
             if (table != String.Empty)
             {
-                 return process_table();
+                if (level != String.Empty)
+                {
+                    return get_level();
+                }
+                return process_table();
             }
             else
             {
                 return null;
             }
+        }
+
+        public DataTable get_level()
+        {
+            string SQL_request = "SELECT HID.GetLevel() AS Level, * FROM dbo.MaterialClass WHERE HID.GetLevel() = " + level;
+            data_rezult = Connect.command_go(SQL_request);
+            if (data_rezult != null)
+            {
+                data_rezult.TableName = table;
+            }
+            return data_rezult;
         }
 
         public DataTable process_table()    //processing the request to output of tables
