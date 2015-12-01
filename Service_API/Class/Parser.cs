@@ -21,19 +21,26 @@ namespace Service_API.Class
         {
             query =  HttpUtility.UrlDecode(query).Replace("\"", "'");
             Regex path_reg = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:/||$))(?:/||$)([a-zA-Z]+||$)");  //receipt of a name of the table, fields and indexes to them
-            Regex query_reg = new Regex(@"(?:[?]|)(?:([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)|([\$&a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)|([\$&a-zA-Z]+|)(?:=|)(?:\(([\$&a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)\)))"); //receipt of a line of request and parameters
+            Regex query_reg = new Regex(@"(?:[?]|)(?:([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)|([\$&a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)|([\$&a-zA-Z]+|)(?:=|)([A-Za-z_]+)(?:\(([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)\)))"); //receipt of a line of request and parameters
             try
             {
                 table = path_reg.Matches(path + query)[0].Groups[1].ToString();    //table name
                 index = path_reg.Matches(path + query)[0].Groups[2].ToString();    //index
-                var matches = query_reg.Matches(path + query);
+                var matches = query_reg.Matches(query);
+                if (matches[0].Groups[1].ToString() != "")
+                {
+                    Array.Resize(ref this.query, this.query.Length + 1);
+                    Array.Resize(ref query_parametr, query_parametr.Length + 1);
+                    this.query[this.query.Length - 1] = matches[0].Groups[1].ToString();    //query_first(expand)
+                    query_parametr[query_parametr.Length - 1] = matches[0].Groups[2].ToString();    //query_parametr
+                }
                 for (int i = 1; i < matches.Count; i++)
                 {
                     string s = matches[i].Groups[1].ToString();
                     if (matches[i].Groups[1].ToString() != "")
                     {
                         
-                        if (matches[i].Groups[1].ToString() == "$expand")
+                        if (matches[i].Groups[1].ToString().IndexOf("$expand") != -1)
                         {
                             Array.Resize(ref this.query, this.query.Length + 1);
                             Array.Resize(ref query_parametr, query_parametr.Length + 1);
@@ -137,6 +144,12 @@ namespace Service_API.Class
             }
             return data_rezult;
         }
+        /*
+         * SELECT HID.ToString() AS Text_OrgNode, 
+HID.GetLevel() AS EmpLevel, *
+FROM dbo.MaterialClass
+WHERE HID.GetLevel() = 0;
+         * */
         public DataTable process_query()
         {
             if (query_parametr.Length != 0)
