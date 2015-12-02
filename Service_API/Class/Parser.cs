@@ -186,7 +186,7 @@ WHERE HID.GetLevel() = 0;
                             SQL_request = "SELECT * FROM \"" + table + "\" WHERE " + query_parametr;
                             break;*/
                         case "$filter":
-                            query_parametr[i] = query_parametr[i].Replace("and", "&").Replace("or", "|").Replace("lt", "<").Replace("gt", ">").Replace("eq", "=").Replace("ne", "!=").Replace("ge", ">=").Replace("le", "<=").Replace("ne", "<>");
+                            query_parametr[i] = query_parametr[i].Replace(" and ", " & ").Replace(" or ", " | ").Replace(" lt ", " < ").Replace(" gt ", " > ").Replace(" eq ", " = ").Replace(" ne ", " != ").Replace(" ge ", " >= ").Replace(" le ", " <= ").Replace(" ne ", " <> ");
                             SQL_request += "SELECT " + (field == String.Empty ? "*" : field) + " FROM \"" + table + "\" WHERE " + query_parametr[i];
                             break;
                         /*case "$count":
