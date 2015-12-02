@@ -22,6 +22,7 @@ namespace Service_API.Class
             query =  HttpUtility.UrlDecode(query).Replace("\"", "'");
             Regex path_reg = new Regex(@"([A-Za-z_]+)(?:(?=\()||$)(?:(?:\(([1-9+])\))|(?:[\$level=]([0-9]+)||$)|(?:/||$))(?:/||$)([a-zA-Z]+||$)");  //receipt of a name of the table, fields and indexes to them
             Regex query_reg = new Regex(@"(?:[?]|)(?:([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)|([\$&a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)|([\$&a-zA-Z]+|)(?:=|)([A-Za-z_]+)(?:\(([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)\)))"); //receipt of a line of request and parameters
+            
             try
             {
                 var matches1 = path_reg.Matches(path);
