@@ -24,39 +24,42 @@ namespace Service_API.Class
             Regex query_reg = new Regex(@"(?:[?]|)(?:([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)|([\$&a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)|([\$&a-zA-Z]+|)(?:=|)([A-Za-z_]+)(?:\(([\$a-zA-Z]+|)(?:=|)([\*1-9a-zA-Zа-яА-Я, ']+||$)\)))"); //receipt of a line of request and parameters
             try
             {
+                var matches1 = path_reg.Matches(path);
                 table = path_reg.Matches(path)[0].Groups[1].ToString();    //table name
                 index = path_reg.Matches(path)[0].Groups[2].ToString();    //index
-                level = path_reg.Matches(path)[1].Groups[3].ToString();    //level
-                var matches = query_reg.Matches(query);
-                var matches1 = path_reg.Matches(path);
-                if (matches[0].Groups[1].ToString() != "")
+                if(matches1.Count > 1)
+                {
+                    level = path_reg.Matches(path)[1].Groups[3].ToString();    //level
+                }
+                var matches2 = query_reg.Matches(query);
+                if (matches2[0].Groups[1].ToString() != "")
                 {
                     Array.Resize(ref this.query, this.query.Length + 1);
                     Array.Resize(ref query_parametr, query_parametr.Length + 1);
-                    this.query[this.query.Length - 1] = matches[0].Groups[1].ToString();    //query_first(expand)
-                    query_parametr[query_parametr.Length - 1] = matches[0].Groups[2].ToString();    //query_parametr
+                    this.query[this.query.Length - 1] = matches2[0].Groups[1].ToString();    //query_first(expand)
+                    query_parametr[query_parametr.Length - 1] = matches2[0].Groups[2].ToString();    //query_parametr
                 }
-                for (int i = 1; i < matches.Count; i++)
+                for (int i = 1; i < matches2.Count; i++)
                 {
-                    string s = matches[i].Groups[1].ToString();
-                    if (matches[i].Groups[1].ToString() != "")
+                    string s = matches2[i].Groups[1].ToString();
+                    if (matches2[i].Groups[1].ToString() != "")
                     {
                         
-                        if (matches[i].Groups[1].ToString().IndexOf("$expand") != -1)
+                        if (matches2[i].Groups[1].ToString().IndexOf("$expand") != -1)
                         {
                             Array.Resize(ref this.query, this.query.Length + 1);
                             Array.Resize(ref query_parametr, query_parametr.Length + 1);
-                            this.query[this.query.Length - 1] = matches[i].Groups[1].ToString();    //query_first(expand)
-                            this.query[this.query.Length - 1] += matches[i + 2].Groups[1].ToString();    //query_second
-                            query_parametr[query_parametr.Length - 1] = matches[i + 2].Groups[2].ToString();    //query_parametr
+                            this.query[this.query.Length - 1] = matches2[i].Groups[1].ToString();    //query_first(expand)
+                            this.query[this.query.Length - 1] += matches2[i + 2].Groups[1].ToString();    //query_second
+                            query_parametr[query_parametr.Length - 1] = matches2[i + 2].Groups[2].ToString();    //query_parametr
                             i += 2;
                         }
                         else
                         {
                             Array.Resize(ref this.query, this.query.Length + 1);
                             Array.Resize(ref query_parametr, query_parametr.Length + 1);
-                            this.query[this.query.Length - 1] = matches[i].Groups[1].ToString();    //query
-                            query_parametr[query_parametr.Length - 1] = matches[i].Groups[2].ToString();    //query_parametr
+                            this.query[this.query.Length - 1] = matches2[i].Groups[1].ToString();    //query
+                            query_parametr[query_parametr.Length - 1] = matches2[i].Groups[2].ToString();    //query_parametr
                         }
                     }
                     
